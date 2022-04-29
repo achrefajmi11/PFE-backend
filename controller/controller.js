@@ -1,6 +1,5 @@
 'use strict';
 const db = require ('../models/index');
-
 async function connection() {
     try {
         await db.sequelize.authenticate();
