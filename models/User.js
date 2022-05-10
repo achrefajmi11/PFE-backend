@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      email: {
+      matricule: {
         type: DataTypes.STRING,
         allowNull: true,
       },
