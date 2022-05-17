@@ -1,6 +1,7 @@
 const { response } = require("express");
 const express = require("express");
 const req = require("express/lib/request");
+const { status } = require("express/lib/response");
 const res = require("express/lib/response");
 const conge = express.Router();
 const db = require('../models');
@@ -21,7 +22,8 @@ conge.post('/conge', async (req, res, next) => {
             type_Conge: req.body.type_Conge,
             Date_debut: req.body.Date_debut,
             Date_retour: req.body.Date_retour ,
-            nombre_jrs: req.body.nombre_jrs
+            nombre_jrs: req.body.nombre_jrs,
+            status: req.body.status,
         }).then((response) => res.status(200).send(response))
             .catch((err) => res.status(400).send(err))
     } catch (e) { console.log(e) }
