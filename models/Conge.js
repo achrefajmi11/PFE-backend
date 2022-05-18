@@ -43,7 +43,8 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement : false,
         allowNull: false,
         primaryKey: false,
-      },  
+      },
+        
     },
     {
       sequelize,

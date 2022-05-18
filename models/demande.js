@@ -19,7 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
+    
+      status: {
+       type: DataTypes.BOOLEAN ,
+       defaultValue: false,
+      }
     },
+
     {
       sequelize,
       modelName: "Demande",
