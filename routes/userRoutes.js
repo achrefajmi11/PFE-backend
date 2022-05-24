@@ -22,7 +22,8 @@ const user = await db.user.findOne({ where: { matricule: req.body.matricule } })
                 fullName: req.body.fullName,
                 username: req.body.username,
                 password: hashedPassword,
-                matricule: req.body.matricule
+                matricule: req.body.matricule,
+                role: "user"
             }).then((response) => res.status(200).send(response))
                 .catch((err) => res.status(400).send(err))
         } catch (e) { console.log(e) }
@@ -41,8 +42,8 @@ route.post('/login', async (req, res, next) => {
     } else {
         await bcrypt.compare(req.body.password, user.password).then(same => {
             if (same) {
-                let token = jwt.sign({ id: user.id, username: user.id, role: "admin" }, Privatekey, {
-                    expiresIn: "1m"
+                let token = jwt.sign({ id: user.id, username: user.id, role: user?.role }, Privatekey, {
+                    expiresIn: "24h"
                 })
                 res.status(200).json({ token: token })
             } else {
@@ -54,6 +55,12 @@ route.post('/login', async (req, res, next) => {
 
 
 })
+
+
+
+
+
+
 
 
 route.get('/user/:id', (req, res, next) => {
@@ -70,11 +77,10 @@ route.get('/users', (req, res, next) => {
 })
 route.patch('/user/:id', (req, res, next) => {
     db.user.update({
-        id: req.body.username,
         fullName: req.body.fullName,
         username: req.body.username,
         password: req.body.password,
-        email: req.body.email
+        matricule: req.body.matricule
     }, { where: { id: req.params.id } })
         .then((response) => res.status(200).send(response))
         .catch((err) => res.status(400).send(err))
