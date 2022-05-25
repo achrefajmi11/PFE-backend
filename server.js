@@ -7,6 +7,18 @@ const controller = require("./controller/controller");
 const userRoutes = require("./routes/userRoutes");
 const demandeRoutes = require("./routes/demandeRoutes")
 const congeRoutes = require("./routes/congeRoutes")
+
+  
+
+
+
+
+
+
+
+
+
+
 controller.connection() 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,3 +31,7 @@ app.use("/" , userRoutes);
 app.use("/" ,demandeRoutes);
 app.use("/" ,congeRoutes);
 app.listen(3005, () => console.log(`Hello world app listening on port 3005!`))
+
+
+
+
