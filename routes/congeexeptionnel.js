@@ -3,26 +3,19 @@ const express = require("express");
 const req = require("express/lib/request");
 const { status } = require("express/lib/response");
 const res = require("express/lib/response");
-const conge = express.Router();
+const congeex = express.Router();
 const db = require('../models');
 const demande = require("./demandeRoutes");
 
-
-
-
-
-
-
-
-conge.post('/congeannuel', async (req, res, next) => {
-    const Conge = {
+congeex.post('/congeexeptionnel', async (req, res, next) => {
+    const Congeex = {
         if(Conge) {
             res.status(400).send({ error: 'Something failed!' })
         }
     }
     try {
-        await db.Conge.create({
-            
+        await db.Congeex.create({
+            type_Conge: req.body.type_Conge,
             Date_debut: req.body.Date_debut,
             Date_retour: req.body.Date_retour,
             nombre_jrs: req.body.nombre_jrs,
@@ -34,41 +27,36 @@ conge.post('/congeannuel', async (req, res, next) => {
 })
 
 
-conge.post('/status', (req, res, next) => {
-//    dbx.Notification.create()// fixme
-    if (req.body.type == "exception"){
-        db.Congeex.update({
-            status: req.body.status,
-        }, { where: { id_Conge: req.body.id } })
-            .then((response) => res.status(200).send(response))
-            .catch((err) => {
-                console.log(" error => ",err.message)
-                res.status(400).send(err);
+
+
+
+
+
+
+
+
+congeex.post('/status', (req, res, next) => {
+   //db.No.create()// fixme
+    db.Congeex.update({
+        status: req.body.status,
+    }, { where: { id_Conge: req.body.id } })
+        .then((response) => res.status(200).send(response))
+        .catch((err) => {
+            console.log(" error => ",err.message)
+            res.status(400).send(err);
         })
-    }
-    else {
-        db.Conge.update({
-            status: req.body.status,
-        }, { where: { id_Conge: req.body.id } })
-            .then((response) => res.status(200).send(response))
-            .catch((err) => {
-                console.log(" error => ",err.message)
-                res.status(400).send(err);
-        })
-    }
-   
 })
 
 
-conge.get('/conge/:id', (req, res, next) => {
-    db.Conge.findOne({ where: { id: req.params.id } })
+congeex.get('/conge/:id', (req, res, next) => {
+    db.Congeex.findOne({ where: { id: req.params.id } })
         .then((response) => res.status(200).send(response))
         .catch((err) => res.status(400).send(err))
 })
 
-conge.get('/userConges/:id', (req, res, next) => {
+congeex.get('/userCongess/:id', (req, res, next) => {
     console.log(" id => " , req.body.id); 
-    db.Conge.findAll({ include: "user" },{
+    db.Congeex.findAll({ include: "user" },{
         where: { userId: req.params.id }
      })
     .then((response) =>{
@@ -80,8 +68,8 @@ conge.get('/userConges/:id', (req, res, next) => {
     })
 })
 
-conge.get('/conge', (req, res, next) => {
-    db.Conge.findAll({ include: "user" })
+congeex.get('/congeex', (req, res, next) => {
+    db.Congeex.findAll({ include: "user" })
         .then((response) => res.status(200).send(response))
         .catch((err) => {
             console.log("bad request =>", err.message)
@@ -89,8 +77,8 @@ conge.get('/conge', (req, res, next) => {
         }
         )
 })
-conge.patch('/conge/:id', (req, res, next) => {
-    db.Conge.update({
+congeex.patch('/conge/:id', (req, res, next) => {
+    db.Congeex.update({
         id: req.body.username,
     }, { where: { id: req.params.id } })
         .then((response) => res.status(200).send(response))
@@ -98,9 +86,9 @@ conge.patch('/conge/:id', (req, res, next) => {
 
 })
 
-conge.delete('/conge/:id', (req, res, next) => {
-    db.Conge.destroy({ where: { id: req.params.id } })
+congeex.delete('/conge/:id', (req, res, next) => {
+    db.Congeex.destroy({ where: { id: req.params.id } })
         .then((response) => res.status(200).send(response))
         .catch((err) => res.status(400).send(err))
 })
-module.exports = conge;
+module.exports = congeex;

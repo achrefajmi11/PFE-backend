@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Conge extends Model {
+  class Congeex extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     this.belongsTo(models.user);
     }
   }
-  Conge.init(
+  Congeex.init(
     {
       id_Conge: {
         type: DataTypes.INTEGER,
@@ -19,7 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
-
+      type_Conge: {
+        type: DataTypes.STRING,
+        autoIncrement : false,
+        allowNull: false,
+        primaryKey: false,
+      }, 
       Date_debut: {
         type: DataTypes.DATE,
         autoIncrement : false,
@@ -48,8 +53,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Conge",
+      modelName: "Congeex",
     }
   );
-  return Conge;
+  return Congeex;
 }
