@@ -43,6 +43,11 @@ module.exports = (sequelize, DataTypes) => {
       status: {
         type: DataTypes.STRING ,
         defaultValue: false,
+       },
+         
+      vu: {
+        type: DataTypes.BOOLEAN ,
+        defaultValue: false,
        }
  
     },

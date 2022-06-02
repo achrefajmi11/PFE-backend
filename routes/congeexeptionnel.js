@@ -56,9 +56,14 @@ congeex.get('/conge/:id', (req, res, next) => {
 
 congeex.get('/userCongess/:id', (req, res, next) => {
     console.log(" id => " , req.body.id); 
-    db.Congeex.findAll({ include: "user" },{
-        where: { userId: req.params.id }
-     })
+    db.Congeex.findAll(
+        {
+            where: { userId: req.params.id }
+         },
+         { 
+            include: "user"
+         }      
+    )
     .then((response) =>{
         res.status(200).send(response)
     })
@@ -70,13 +75,38 @@ congeex.get('/userCongess/:id', (req, res, next) => {
 
 congeex.get('/congeex', (req, res, next) => {
     db.Congeex.findAll({ include: "user" })
-        .then((response) => res.status(200).send(response))
+        .then((response) => {
+            response.map((v,i,a) => {
+                const test = a
+                    .filter(subV => v.dataValues.userId == subV.dataValues.userId && subV.dataValues.status == 1 )
+                    .map(v => v.dataValues.nombre_jrs)
+                    .reduce((acc,crr)=> acc+crr ,0);
+                v.dataValues.usedDays = test;
+                // console.log("v => " , v.dataValues.usedDays);
+            })
+            res.status(200).send(response)
+        })
         .catch((err) => {
             console.log("bad request =>", err.message)
             res.status(400).send(err)
         }
         )
 })
+congeex.get('/notificationss', async (req, res, next) => {
+     await db.Congeex.findAll({
+         where: {
+             vu : false
+         }
+     })
+         .then((response) => {
+             res.status(200).send(response);
+         })
+         .catch((err) => {
+             console.log("bad request =>", err.message)
+             res.status(400).send(err)
+         }
+         )
+ })
 congeex.patch('/conge/:id', (req, res, next) => {
     db.Congeex.update({
         id: req.body.username,

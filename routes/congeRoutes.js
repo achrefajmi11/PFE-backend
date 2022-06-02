@@ -66,12 +66,17 @@ conge.get('/conge/:id', (req, res, next) => {
         .catch((err) => res.status(400).send(err))
 })
 
-conge.get('/userConges/:id', (req, res, next) => {
-    console.log(" id => " , req.body.id); 
-    db.Conge.findAll({ include: "user" },{
+conge.get('/userConges/:id', (req, res, next) => { 
+    db.Conge.findAll(
+     {
         where: { userId: req.params.id }
-     })
+     },
+     { 
+        include: "user"
+     }
+     )
     .then((response) =>{
+        console.log("response => ", req.params.id); 
         res.status(200).send(response)
     })
     .catch((err) => {
@@ -80,9 +85,42 @@ conge.get('/userConges/:id', (req, res, next) => {
     })
 })
 
-conge.get('/conge', (req, res, next) => {
-    db.Conge.findAll({ include: "user" })
-        .then((response) => res.status(200).send(response))
+conge.get('/conge', async (req, res, next) => {
+    await db.Conge.update({
+        vu : true
+    },{
+        where: {
+                
+        }
+    });
+    await db.Conge.findAll({ include: "user" })
+        .then((response) => {
+            response.map((v,i,a) => {
+                const test = a
+                    .filter(subV => v.dataValues.userId == subV.dataValues.userId && subV.dataValues.status == 1 )
+                    .map(v => v.dataValues.nombre_jrs)
+                    .reduce((acc,crr)=> acc+crr ,0);
+                v.dataValues.usedDays = test;
+                // console.log("v => " , v.dataValues.usedDays);
+            })
+
+            res.status(200).send(response);
+        })
+        .catch((err) => {
+            console.log("bad request =>", err.message)
+            res.status(400).send(err)
+        }
+        )
+})
+conge.get('/notifications', async (req, res, next) => {
+    await db.Conge.findAll({
+        where: {
+            vu : false
+        }
+    })
+        .then((response) => {
+            res.status(200).send(response);
+        })
         .catch((err) => {
             console.log("bad request =>", err.message)
             res.status(400).send(err)

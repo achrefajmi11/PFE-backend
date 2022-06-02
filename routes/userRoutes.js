@@ -75,11 +75,12 @@ route.get('/users', (req, res, next) => {
         .then((response) => res.status(200).send(response))
         .catch((err) => res.status(400).send(err))
 })
-route.patch('/user/:id', (req, res, next) => {
+route.patch('/user/:id', async(req, res, next) => {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
     db.user.update({
         fullName: req.body.fullName,
         username: req.body.username,
-        password: req.body.password,
+        password: hashedPassword,
         matricule: req.body.matricule
     }, { where: { id: req.params.id } })
         .then((response) => res.status(200).send(response))
@@ -89,7 +90,13 @@ route.patch('/user/:id', (req, res, next) => {
 
 route.delete('/user/:id', (req, res, next) => {
     db.user.destroy({ where: { id: req.params.id } })
-        .then((response) => res.status(200).send(response))
-        .catch((err) => res.status(400).send(err))
+        .then((response) => {
+            return res.status(200).send("deleted")
+         } 
+         )
+        .catch((err) => {
+            console.log("error => ",err.message)
+            return res.send(err)
+        })
 })
 module.exports = route;
